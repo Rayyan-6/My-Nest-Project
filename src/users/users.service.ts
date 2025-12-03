@@ -9,8 +9,8 @@ export class UserService{
     
     constructor( @InjectModel(User.name) private userModel: Model<User>){}
 
-    createUser(createUser: CreateUserDto){
-        const newUser = new this.userModel(CreateUserDto)
+    createUser(createUserDto: CreateUserDto){
+        const newUser = new this.userModel(createUserDto)
 
      
         return newUser.save()

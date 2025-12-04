@@ -24,7 +24,8 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    const users = this.usersRepository.find()
+    return users;
   }
 
   findOne(id: number) {

@@ -3,9 +3,19 @@ import { isArray } from "class-validator";
 import { config } from "dotenv";
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
+import { UserEntity } from "src/users/entities/user.entity";
 import { UsersService } from "src/users/users.service";
 
 config()
+
+
+declare global{
+    namespace Express{
+        interface Request{
+            currentUser?: UserEntity
+        }
+    }
+}
 
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
@@ -19,7 +29,7 @@ export class CurrentUserMiddleware implements NestMiddleware {
 
         // Correct logic
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            console.log("if part exec");
+            (req as any).currentUser = null;
             return next();
         }
 
@@ -36,10 +46,11 @@ export class CurrentUserMiddleware implements NestMiddleware {
             ) as JwtPayload;
 
             const currentUser = await this.usersService.findOne(+id);
+            req.currentUser = currentUser;
 
             console.log("current user:", currentUser);
 
-            (req as any).user = currentUser;
+            (req as any).currentUser = currentUser;
         } catch (err) {
             console.log("Invalid token");
         }

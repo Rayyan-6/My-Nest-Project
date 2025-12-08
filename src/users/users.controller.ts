@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserSignInDto } from './dto/user-signin.dto';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 import { AuthorizeGuard } from './guards/authorize.guard';
+import { Roles } from 'src/utility/common/user-roles.enum';
+import { RoleCheckGuard } from './guards/roleCheck.guard';
+import { Rolesalt } from 'src/utility/decorators/role-check.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -30,7 +31,9 @@ export class UsersController {
     return {accessToken, user}
   }
 
-  @UseGuards(AuthorizeGuard)
+  
+  @UseGuards(AuthorizeGuard, RoleCheckGuard)
+  @Rolesalt('admin')
   @Get()
   async findAll(){
     return await this.usersService.findAll()
@@ -49,10 +52,10 @@ export class UsersController {
     return await this.usersService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  //   return this.usersService.update(+id, updateUserDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

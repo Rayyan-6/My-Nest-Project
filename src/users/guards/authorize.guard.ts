@@ -45,15 +45,15 @@ export class AuthorizeGuard implements CanActivate {
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
 
-        console.log("👉 AuthorizeGuard executing...");
+        // console.log("👉 AuthorizeGuard executing...");
 
         const request = context.switchToHttp().getRequest();
 
-        console.log("👉 Request Headers:", request.headers);
+        // console.log("👉 Request Headers:", request.headers);
 
         // 1. Extract authorization header
         const authHeader = request.headers.authorization;
-        console.log("👉 Authorization Header:", authHeader);
+        // console.log("👉 Authorization Header:", authHeader);
 
         if (!authHeader) {
             console.log("❌ No Authorization header found");

@@ -30,11 +30,13 @@ export class UsersController {
     return {accessToken, user}
   }
 
+  @UseGuards(AuthorizeGuard)
   @Get()
   async findAll(){
     return await this.usersService.findAll()
   }
 
+  @UseGuards(AuthorizeGuard)
   @Get('me')
   getProfile(@CurrentUser() currentUser: UserEntity){
     return currentUser

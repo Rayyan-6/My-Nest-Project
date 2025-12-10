@@ -21,7 +21,9 @@ const EventHandlers = [UserCreatedHandler];
 JwtModule.register({
       secret: process.env.ACCESS_TOKEN_SECRET_KEY,
       signOptions: { expiresIn: "15m" },
-    }),],
+    }),
+    
+  ],
   controllers: [UsersController],
   providers: [...CommandHandlers,
     ...QueryHandlers,

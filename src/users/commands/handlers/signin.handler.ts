@@ -4,12 +4,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../entities/user.entity';
 import { compare } from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { sign, SignOptions } from 'jsonwebtoken';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { config } from 'dotenv';
 
 
-config()
+config()  
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
@@ -31,22 +30,14 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     const ok = await compare(password, (user as any).password);
     if (!ok) throw new Error('Bad credentials');
 
-    const payload = { id: user.id, email: user.email, role: (user as any).role };
-    const accessToken = this.jwtService.sign(
-    //     payload, {
-    //   secret: process.env.ACCESS_TOKEN_SECRET_KEY,
-    //   expiresIn: process.env.ACCESS_TOKEN_EXPIRE_LIMIT || '1h',
-    // }
+   
+  const payload = { id: user.id, email: user.email, name: user.name };
 
+const accessToken = this.jwtService.sign(payload, {
+  secret: process.env.ACCESS_TOKEN_SECRET_KEY as string,
+  expiresIn: process.env.ACCESS_TOKEN_EXPIRE_LIMIT || '1h'
+} as JwtSignOptions);
 
-    { id: user.id, email: user.email },
-    process.env.ACCESS_TOKEN_SECRET_KEY as string,
-    {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIRE_LIMIT || "1h",
-    } 
-    as SignOptions
-
-);
 
     delete (user as any).password;
     return { user, accessToken };

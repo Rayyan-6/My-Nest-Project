@@ -17,7 +17,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   ) {}
 
   async execute(command: CreateUserCommand) {
-    const { username, email, password, displayname } = command;
+    const { name, email, password } = command;
 
     const exists = await this.usersRepo.findOneBy({ email });
     if (exists) throw new Error('Email already exists');
@@ -33,7 +33,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     const saved = await this.usersRepo.save(user);
 
     // publish an event (optional)
-    this.eventBus.publish(new UserCreatedEvent(saved.id));
+    this.eventBus.publish(new UserCreatedEvent(saved.email));
 
     // remove password before returning
     // convert to plain object if desired

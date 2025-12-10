@@ -3,7 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from 'db/data-source';
 import { UsersModule } from './users/users.module';
 import { CurrentUserMiddleware } from './utility/middlewares/current-user.middleware';
-
+import {EventEmitterModule} from '@nestjs/event-emitter'
+import { EmailModule } from './email/email.module';
 
 
 @Module({
@@ -12,6 +13,8 @@ import { CurrentUserMiddleware } from './utility/middlewares/current-user.middle
     // UserModule
     TypeOrmModule.forRoot(dataSourceOptions),
     UsersModule,
+    EventEmitterModule.forRoot(),
+    EmailModule
     
   ],
   controllers: [],

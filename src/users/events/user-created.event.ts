@@ -1,4 +1,4 @@
 export class UserCreatedEvent {
-  constructor(public readonly userId: number) {}
+  constructor(public readonly email: string) {}
 }
     

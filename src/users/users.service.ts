@@ -7,13 +7,19 @@ import { hash, compare } from 'bcrypt';
 import { instanceToPlain } from 'class-transformer';
 import { UserSignInDto } from './dto/user-signin.dto';
 import { sign, SignOptions } from 'jsonwebtoken';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserCreatedEvent } from './events/user-created.event';
 
 @Injectable()
 export class UsersService {
 
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>
+    private usersRepository: Repository<UserEntity>,
+    private readonly eventEmitter: EventEmitter2
+
+
+
   ){}
 
   async signup(userSignUpDto:UserSignUpDto): Promise<UserEntity>{
@@ -24,6 +30,9 @@ export class UsersService {
       userSignUpDto.password = await hash(userSignUpDto.password,10)
       let user= this.usersRepository.create(userSignUpDto)
       user = await this.usersRepository.save(user)
+
+          this.eventEmitter.emit('user.created', new UserCreatedEvent(userSignUpDto.email))
+      
     
       return user
 

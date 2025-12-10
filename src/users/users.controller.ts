@@ -14,13 +14,16 @@ import { CreateUserCommand } from './commands/create-user.command';
 import { SignInCommand } from './commands/signin.command';
 import { GetUserQuery } from './queries/get-user.query';
 import { GetUsersQuery } from './queries/handlers/get-users.handler'
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserCreatedEvent } from './events/user-created.event';
 
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService,
     private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus
+    private readonly queryBus: QueryBus,
+
   ) {}
 
 
@@ -29,7 +32,7 @@ export class UsersController {
   // async signup(@Body() userSignUpDto:UserSignUpDto):Promise<UserEntity>{
     console.log(userSignUpDto)
     // return await this.usersService.signup(userSignUpDto)
-     return await this.commandBus.execute(new CreateUserCommand(userSignUpDto.name, userSignUpDto.email, userSignUpDto.password));
+    return await this.commandBus.execute(new CreateUserCommand(userSignUpDto.name, userSignUpDto.email, userSignUpDto.password));
   }
 
   @Post('signin')

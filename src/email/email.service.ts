@@ -8,6 +8,6 @@ import { UserCreatedEvent } from 'src/users/events/user-created.event';
 export class EmailService {
   @OnEvent('user.created')
   handleUserCreatedEvent(payload: UserCreatedEvent){
-    console.log("User created event received ", payload.email)
+    console.log("User created event received by email service ", payload.email)
   }
 }

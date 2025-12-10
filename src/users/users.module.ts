@@ -11,6 +11,7 @@ import { GetUserHandler } from './queries/handlers/get-user.handler';
 import { GetUsersHandler } from './queries/handlers/get-users.handler';
 import { UserCreatedHandler } from './events/handlers/user-created.handler';
 import { CqrsModule } from '@nestjs/cqrs';
+import { RedisClientService } from 'src/redis-client.service';
 
 const CommandHandlers = [CreateUserHandler, SignInHandler];
 const QueryHandlers = [GetUserHandler, GetUsersHandler];
@@ -29,6 +30,7 @@ JwtModule.register({
     ...QueryHandlers,
     ...EventHandlers,
     UsersService, 
+    RedisClientService,
     AuthorizeGuard
   ],
   exports: [UsersService]

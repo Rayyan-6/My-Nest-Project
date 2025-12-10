@@ -9,6 +9,7 @@ import { UserSignInDto } from './dto/user-signin.dto';
 import { sign, SignOptions } from 'jsonwebtoken';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserCreatedEvent } from './events/user-created.event';
+import { RedisClientService } from 'src/redis-client.service';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,9 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
-    private readonly eventEmitter: EventEmitter2
+    private readonly eventEmitter: EventEmitter2,
+    private readonly redisService: RedisClientService
+
 
 
 
@@ -31,8 +34,11 @@ export class UsersService {
       let user= this.usersRepository.create(userSignUpDto)
       user = await this.usersRepository.save(user)
 
-          this.eventEmitter.emit('user.created', new UserCreatedEvent(userSignUpDto.email))
-      
+      this.redisService.getClient().emit('user-created', userSignUpDto)
+      console.log("Redis event emitter")
+
+      this.eventEmitter.emit('user.created', new UserCreatedEvent(userSignUpDto.email))
+      console.log("CQRS event emitter")
     
       return user
 

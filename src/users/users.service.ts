@@ -37,7 +37,7 @@ export class UsersService {
       this.redisService.getClient().emit('user-created', userSignUpDto)
       console.log("Redis event emitter")
 
-      this.eventEmitter.emit('user.created', new UserCreatedEvent(userSignUpDto.email))
+      this.eventEmitter.emit('user.created', new UserCreatedEvent(userSignUpDto.email, userSignUpDto.id))
       console.log("CQRS event emitter")
     
       return user

@@ -33,7 +33,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     const saved = await this.usersRepo.save(user);
 
     // publish an event (optional)
-    this.eventBus.publish(new UserCreatedEvent(saved.email));
+    this.eventBus.publish(new UserCreatedEvent(saved.email, saved.id));
 
     // remove password before returning
     // convert to plain object if desired

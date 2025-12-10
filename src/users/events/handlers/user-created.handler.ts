@@ -6,7 +6,7 @@ import { EventPattern, Payload } from '@nestjs/microservices';
 export class UserCreatedHandler implements IEventHandler<UserCreatedEvent> {
   handle(event: UserCreatedEvent) {
     // send welcome email, audit log, etc.
-    console.log('User created, id:', event.email);
+    console.log('User created, id:', event.id);
   }
 
   @EventPattern('user_created')

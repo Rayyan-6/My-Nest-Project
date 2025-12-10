@@ -8,4 +8,5 @@ export class UserSignUpDto  extends UserSignInDto{
     @IsString({message: "Name should be a string"})
     @ApiProperty({ description: 'Name of the user', example: 'John Doe' })
     name: string;
+  id: number;
 }

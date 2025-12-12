@@ -55,7 +55,9 @@ export class UsersService {
     return userExists
   }
 
-
+getGreeting(name: string) {
+    return `Hello, ${name}`;
+  }
 
 
   findAll() {

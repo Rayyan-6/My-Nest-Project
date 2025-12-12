@@ -9,7 +9,7 @@ import { UserSignInDto } from './dto/user-signin.dto';
 import { sign, SignOptions } from 'jsonwebtoken';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserCreatedEvent } from './events/user-created.event';
-import { RedisClientService } from 'src/redis-client.service';
+import { RedisClientService } from '../redis-client.service';
 
 @Injectable()
 export class UsersService {

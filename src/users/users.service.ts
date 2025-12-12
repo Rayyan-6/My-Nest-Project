@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -13,6 +13,7 @@ import { RedisClientService } from '../redis-client.service';
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
 
   constructor(
     @InjectRepository(UserEntity)
@@ -34,6 +35,7 @@ export class UsersService {
       let user= this.usersRepository.create(userSignUpDto)
       user = await this.usersRepository.save(user)
 
+      this.logger.debug('Signup data validated'); 
       this.redisService.getClient().emit('user-created', userSignUpDto)
       console.log("Redis event emitter")
 

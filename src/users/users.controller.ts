@@ -16,6 +16,7 @@ import { GetUserQuery } from './queries/get-user.query';
 import { GetUsersQuery } from './queries/handlers/get-users.handler'
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserCreatedEvent } from './events/user-created.event';
+import { sanitizeOutput } from 'src/utility/common/sanitize.util';
 
 
 @Controller('users')
@@ -32,7 +33,13 @@ export class UsersController {
   // async signup(@Body() userSignUpDto:UserSignUpDto):Promise<UserEntity>{
     console.log(userSignUpDto)
     // return await this.usersService.signup(userSignUpDto)
-    return await this.commandBus.execute(new CreateUserCommand(userSignUpDto.name, userSignUpDto.email, userSignUpDto.password));
+    // return await this.commandBus.execute(new CreateUserCommand(userSignUpDto.name, userSignUpDto.email, userSignUpDto.password));
+
+      const cleanData = sanitizeOutput(userSignUpDto);
+
+    return await this.commandBus.execute(
+    new CreateUserCommand(cleanData.name, cleanData.email, cleanData.password),
+  );
   }
 
   @Post('signin')
@@ -45,7 +52,12 @@ export class UsersController {
     const accessToken = await this.usersService.accessToken(user)
 
     // return {accessToken, user}
-    return await this.commandBus.execute(new SignInCommand(userSignInDto.email, userSignInDto.password));
+    // return await this.commandBus.execute(new SignInCommand(userSignInDto.email, userSignInDto.password));
+    const cleanData = sanitizeOutput(userSignInDto);
+
+  return await this.commandBus.execute(
+    new SignInCommand(cleanData.email, cleanData.password),
+  );
   }
 
   

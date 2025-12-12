@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,7 @@ app.connectMicroservice<MicroserviceOptions>({
   
   app.useGlobalPipes(new ValidationPipe({whitelist: true}))
   app.setGlobalPrefix('api/v1')
+  app.use(helmet())
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

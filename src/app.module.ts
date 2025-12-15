@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { CurrentUserMiddleware } from './utility/middlewares/current-user.middleware';
 import {EventEmitterModule} from '@nestjs/event-emitter'
 import { EmailModule } from './email/email.module';
+import { Auth0Module } from './auth0/auth0.module';
 
 
 @Module({
@@ -14,7 +15,8 @@ import { EmailModule } from './email/email.module';
     TypeOrmModule.forRoot(dataSourceOptions),
     UsersModule,
     EventEmitterModule.forRoot(),
-    EmailModule
+    EmailModule,
+    Auth0Module
     
   ],
   controllers: [],

@@ -17,6 +17,7 @@ import { GetUsersQuery } from './queries/handlers/get-users.handler'
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserCreatedEvent } from './events/user-created.event';
 import { sanitizeOutput } from 'src/utility/common/sanitize.util';
+import { JwtAuthGuard } from 'src/auth0/jwt-auth.guard';
 
 
 @Controller('users')
@@ -61,10 +62,12 @@ export class UsersController {
   }
 
   
-  @UseGuards(AuthorizeGuard, RoleCheckGuard)
-  @Rolesalt('admin')
+  // @UseGuards(AuthorizeGuard, RoleCheckGuard)
+  // @Rolesalt('admin')
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findAll(){
+     console.log('🚀 Find all users Controller reached');
     // return await this.usersService.findAll()
     return await this.queryBus.execute(new GetUsersQuery())
   }
